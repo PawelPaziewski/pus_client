@@ -34,6 +34,10 @@ MainWindow::MainWindow(QWidget *parent)
             this, SLOT(usersList()));
     connect(timerChannels, SIGNAL(timeout()),
             this, SLOT(channelsList()));
+    connect(ui->DeleteChannel, SIGNAL(clicked()),
+            this, SLOT(deleteChannel()));
+    connect(ui->LeaveChannel, SIGNAL(clicked()),
+            this, SLOT(leaveChannel()));
 
     timerUsers->start(9000);
     timerChannels->start(9500);
@@ -172,4 +176,34 @@ void MainWindow::createChannel()
                 QString().append("CREATECHANNEL $").append(channelName->text()).append("$").toLocal8Bit()
                 );
     addChannel->hide();
+}
+
+void MainWindow::deleteChannel()
+{
+    for(int i=0;i<ui->channelsElements->count();i++){
+        ui->channelsElements->itemAt(i);
+        if(static_cast<QRadioButton*>(ui->channelsElements->itemAt(i)->widget())->isChecked()){
+            socket->write(
+                        QString().append("REMOVECHANNEL $")
+                        .append(static_cast<QRadioButton*>(ui->channelsElements->itemAt(i)->widget())->text())
+                        .append("$ ").toLocal8Bit()
+                        );
+            ui->channelsElements->takeAt(i);
+        }
+    }
+}
+
+void MainWindow::leaveChannel()
+{
+    for(int i=0;i<ui->channelsElements->count();i++){
+        ui->channelsElements->itemAt(i);
+        if(static_cast<QRadioButton*>(ui->channelsElements->itemAt(i)->widget())->isChecked()){
+            socket->write(
+                        QString().append("LEAVECHANNEL $")
+                        .append(static_cast<QRadioButton*>(ui->channelsElements->itemAt(i)->widget())->text())
+                        .append("$ ").toLocal8Bit()
+                        );
+            ui->channelsElements->takeAt(i);
+        }
+    }
 }

@@ -99,6 +99,24 @@
        </widget>
       </item>
       <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_7">
+        <item>
+         <widget class="QPushButton" name="LeaveChannel">
+          <property name="text">
+           <string>Leave channel</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="DeleteChannel">
+          <property name="text">
+           <string>Delete channel</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
        <widget class="QGroupBox" name="channels">
         <property name="title">
          <string>Channels</string>

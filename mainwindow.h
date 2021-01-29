@@ -45,5 +45,7 @@ public slots:
     void joinChannel(QListWidgetItem *item);
     void showChannel();
     void createChannel();
+    void deleteChannel();
+    void leaveChannel();
 };
 #endif // MAINWINDOW_H
