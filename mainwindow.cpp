@@ -93,6 +93,7 @@ void MainWindow::sendMessage()
                         .append(static_cast<QRadioButton*>(ui->channelsElements->itemAt(i)->widget())->text())
                         .append("$ ")
                         .append(ui->MessageInput->text()).toLocal8Bit()
+                        .append("$")
                         );
             ui->MessageInput->clear();
         }
@@ -114,7 +115,7 @@ void MainWindow::readyRead()
         response.replace(0,9,"");
         QStringList channels = response.split("\n");
         ui->channelsList->clear();
-        for(int i=0;i<channels.size();i++) {
+        for(int i=0; i<channels.size(); i++){
             ui->channelsList->addItem(channels.at(i));
         }
         return;
