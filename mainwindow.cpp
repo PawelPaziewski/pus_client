@@ -28,6 +28,8 @@ MainWindow::MainWindow(QWidget *parent)
             this, SLOT(showChannel()));
     connect(socket, SIGNAL(connected()),
             this, SLOT(onConnection()));
+    connect(ui->joinChannelButton, SIGNAL(clicked()),
+            this, SLOT(joinChannel()));
     connect(ui->channelsList, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
             this, SLOT(joinChannel(QListWidgetItem *)));
     connect(timerUsers, SIGNAL(timeout()),
@@ -39,8 +41,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->LeaveChannel, SIGNAL(clicked()),
             this, SLOT(leaveChannel()));
 
-    timerUsers->start(9000);
-    timerChannels->start(9500);
+//    timerUsers->start(9000);
+//    timerChannels->start(9500);
 
     /**
      * Obsługa dialogu
@@ -104,6 +106,8 @@ void MainWindow::sendMessage()
     }
 }
 
+
+
 void MainWindow::readyRead()
 {
     QString response = socket->readAll();
@@ -127,6 +131,10 @@ void MainWindow::readyRead()
         response.replace(0,12,"");
         QRadioButton *rb = new QRadioButton(response, this);
         ui->channelsElements->addWidget(rb);
+        return;
+    } else if(response.indexOf("CHANNELCREATED")==0){
+        QRadioButton *rb = new QRadioButton(getFirstAttribute(response), this);
+        ui->otherChannelsElements->addWidget(rb);
         return;
     }
     ui->plainTextEdit->appendPlainText(response);
@@ -206,4 +214,27 @@ void MainWindow::leaveChannel()
             ui->channelsElements->takeAt(i);
         }
     }
+}
+
+void MainWindow::joinChannel()
+{
+    for(int i=0; i < ui->otherChannelsElements->count(); i++){
+        if(static_cast<QRadioButton*>(ui->otherChannelsElements->itemAt(i)->widget())->isChecked()){
+            socket->write(
+                        QString().append("JOINCHANNEL $")
+                        .append(static_cast<QRadioButton*>(ui->otherChannelsElements->itemAt(i)->widget())->text())
+                        .append("$")
+                        .toLocal8Bit()
+                        );
+            ui->otherChannelsElements->takeAt(i);
+            return;
+        }
+    }
+}
+
+QString MainWindow::getFirstAttribute(QString response)
+{
+    QStringList list = response.split("$");
+    return list.at(1);
+
 }

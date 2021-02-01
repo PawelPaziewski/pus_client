@@ -99,36 +99,6 @@
        </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_7">
-        <item>
-         <widget class="QPushButton" name="LeaveChannel">
-          <property name="text">
-           <string>Leave channel</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="DeleteChannel">
-          <property name="text">
-           <string>Delete channel</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <widget class="QGroupBox" name="channels">
-        <property name="title">
-         <string>Channels</string>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout_4">
-         <item>
-          <layout class="QVBoxLayout" name="channelsElements"/>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
        <layout class="QHBoxLayout" name="horizontalLayout_5">
         <property name="topMargin">
          <number>10</number>
@@ -188,6 +158,18 @@
        </widget>
       </item>
       <item>
+       <widget class="QGroupBox" name="users">
+        <property name="title">
+         <string>Users</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_5">
+         <item>
+          <layout class="QVBoxLayout" name="usersElements"/>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
        <widget class="QListWidget" name="usersList"/>
       </item>
       <item>
@@ -198,14 +180,74 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="createChannelButton">
-        <property name="text">
-         <string>Create channel</string>
+       <widget class="QListWidget" name="channelsList"/>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_7">
+        <item>
+         <widget class="QPushButton" name="ListUsers">
+          <property name="text">
+           <string>ListUsers</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="LeaveChannel">
+          <property name="text">
+           <string>Leave channel</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="DeleteChannel">
+          <property name="text">
+           <string>Delete channel</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="channels">
+        <property name="title">
+         <string>Joined channels:</string>
         </property>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <layout class="QVBoxLayout" name="channelsElements"/>
+         </item>
+        </layout>
        </widget>
       </item>
       <item>
-       <widget class="QListWidget" name="channelsList"/>
+       <layout class="QHBoxLayout" name="horizontalLayout_9">
+        <item>
+         <widget class="QPushButton" name="createChannelButton">
+          <property name="text">
+           <string>Create channel</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="joinChannelButton">
+          <property name="text">
+           <string>Join channel</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="otherChannels">
+        <property name="title">
+         <string>Other channels:</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_7">
+         <item>
+          <layout class="QVBoxLayout" name="otherChannelsElements"/>
+         </item>
+        </layout>
+       </widget>
       </item>
      </layout>
     </item>

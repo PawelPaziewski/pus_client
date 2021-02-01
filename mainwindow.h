@@ -47,5 +47,7 @@ public slots:
     void createChannel();
     void deleteChannel();
     void leaveChannel();
+    QString getFirstAttribute(QString response);
+    void joinChannel();
 };
 #endif // MAINWINDOW_H
