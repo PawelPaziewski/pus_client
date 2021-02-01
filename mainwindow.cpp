@@ -40,6 +40,8 @@ MainWindow::MainWindow(QWidget *parent)
             this, SLOT(deleteChannel()));
     connect(ui->LeaveChannel, SIGNAL(clicked()),
             this, SLOT(leaveChannel()));
+    connect(ui->ListUsers, SIGNAL(clicked()),
+            this, SLOT(listUsers()));
 
 //    timerUsers->start(9000);
 //    timerChannels->start(9500);
@@ -111,15 +113,16 @@ void MainWindow::sendMessage()
 void MainWindow::readyRead()
 {
     QString response = socket->readAll();
-    if(response.indexOf("USERS")==0){
-        response.replace(0,6,"");
-        QStringList users = response.split("\n");
-        ui->usersList->clear();
-        for(int i=0;i<users.size();i++) {
-            ui->usersList->addItem(users.at(i));
-        }
-        return;
-    } else if(response.indexOf("CHANNELS")==0){
+    if(response.contains("USERSONCHANNEL")){
+            QString textToShow = QString().append("Users on channel: ")
+                    .append(getFirstAttribute(response))
+                    .append(" : ");
+            QStringList list = getSecondAttribute(response).split("&");
+            for(int i=0; i<list.size(); i++){
+                textToShow.append(list.at(i)).append(" ");
+            }
+            ui->plainTextEdit->appendPlainText(textToShow);
+     }else if(response.contains("CHANNELS")){
         response.replace(0,9,"");
         QStringList channels = response.split("\n");
         ui->channelsList->clear();
@@ -127,17 +130,25 @@ void MainWindow::readyRead()
             ui->channelsList->addItem(channels.at(i));
         }
         return;
-    } else if(response.indexOf("JOINCHANNEL")==0){
-        response.replace(0,12,"");
-        QRadioButton *rb = new QRadioButton(response, this);
+    } else if(response.contains("JOINCHANNEL")){
+        QRadioButton *rb = new QRadioButton(getFirstAttribute(response), this);
         ui->channelsElements->addWidget(rb);
         return;
-    } else if(response.indexOf("CHANNELCREATED")==0){
+    } else if(response.contains("CHANNELCREATED")){
         QRadioButton *rb = new QRadioButton(getFirstAttribute(response), this);
         ui->otherChannelsElements->addWidget(rb);
         return;
+    } else if(response.indexOf("USERS")==0){
+        response.replace(0,6,"");
+        QStringList users = response.split("\n");
+        ui->usersList->clear();
+        for(int i=0;i<users.size();i++) {
+            ui->usersList->addItem(users.at(i));
+        }
+        return;
+    } else{
+         ui->plainTextEdit->appendPlainText(response);
     }
-    ui->plainTextEdit->appendPlainText(response);
 }
 
 void MainWindow::setNick()
@@ -204,7 +215,6 @@ void MainWindow::deleteChannel()
 void MainWindow::leaveChannel()
 {
     for(int i=0;i<ui->channelsElements->count();i++){
-        ui->channelsElements->itemAt(i);
         if(static_cast<QRadioButton*>(ui->channelsElements->itemAt(i)->widget())->isChecked()){
             socket->write(
                         QString().append("LEAVECHANNEL $")
@@ -232,9 +242,28 @@ void MainWindow::joinChannel()
     }
 }
 
+void MainWindow::listUsers()
+{
+    for(int i=0;i<ui->channelsElements->count();i++){
+        if(static_cast<QRadioButton*>(ui->channelsElements->itemAt(i)->widget())->isChecked()){
+            socket->write(
+                        QString().append("LISTONCHANNEL $")
+                        .append(static_cast<QRadioButton*>(ui->channelsElements->itemAt(i)->widget())->text())
+                        .append("$").toLocal8Bit()
+                        );
+        }
+    }
+}
+
 QString MainWindow::getFirstAttribute(QString response)
 {
     QStringList list = response.split("$");
     return list.at(1);
 
+}
+
+QString MainWindow::getSecondAttribute(QString response)
+{
+    QStringList list = response.split("$");
+    return list.at(2);
 }

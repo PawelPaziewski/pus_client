@@ -31,6 +31,8 @@ private:
     QVBoxLayout *channelDialogLayout;
     QLineEdit *channelName;
     QPushButton *channelNameButton;
+    QString getFirstAttribute(QString response);
+    QString getSecondAttribute(QString response);
 
 public slots:
     void connectServer();
@@ -47,7 +49,7 @@ public slots:
     void createChannel();
     void deleteChannel();
     void leaveChannel();
-    QString getFirstAttribute(QString response);
     void joinChannel();
+    void listUsers();
 };
 #endif // MAINWINDOW_H
